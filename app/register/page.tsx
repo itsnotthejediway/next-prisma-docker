@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import AnimatedLogo from '@/components/animated-logo';
 
 export default function RegisterPage() {
   const router = useRouter();

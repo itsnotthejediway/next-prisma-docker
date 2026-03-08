@@ -1,96 +1,31 @@
-'use client';
+import LoginForm from "../../components/login/login-form";
+// import { checkIsAuthenticated } from "@/utils/amplify-utils";
+import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
-import { useEffect, useState } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+export const metadata: Metadata = {
+  title: "Login - Alabama Cyber Range",
+  description: "Sign in to the Alabama Cyber Range platform",
+};
 
-export default function LoginPage() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.replace('/');
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
-    return <p>Loading...</p>;
-  }
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const res = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (res?.ok) {
-      router.push('/');
-    } else {
-      setError('Invalid email or password');
-    }
-  };
+const SignIn = async () => {
+  // Middleware already handles redirecting authenticated users away from signin page
 
   return (
-    <div className="max-w-sm mx-auto p-4">
-      <div className="mb-4">
-        <Link href="/" className="text-blue-600 hover:underline">
-          ← Back to Home
-        </Link>
+    <div className="relative min-h-screen">
+      <div className="pointer-events-none fixed inset-0">
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" /> */}
+        {/* <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-500/10 blur-[100px]" />
+        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-purple-500/10 blur-[100px]" /> */}
       </div>
 
-      {/* پیام درباره اکانت تستی */}
-      <div className="mb-6 p-4 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">
-        You can login with this test user:<br />
-        <strong>Email:</strong> joodi@gmail.com<br />
-        <strong>Password:</strong> 123456
-      </div>
-
-      <form onSubmit={handleLogin} className="mb-4">
-        <h2 className="text-xl mb-4">Login with Email</h2>
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 w-full mb-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-
-        <button
-          type="submit"
-          className="bg-black text-white px-4 py-2 rounded w-full"
-        >
-          Login
-        </button>
-      </form>
-
-      <div className="text-center">
-        <p className="text-sm text-gray-600">
-          Don't have an account?{' '}
-          <Link href="/register" className="text-blue-600 hover:underline">
-            Register here
-          </Link>
-        </p>
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <main className="flex-1 flex items-center justify-center py-16">
+          <LoginForm />
+        </main>
       </div>
     </div>
   );
-}
+};
+
+export default SignIn;
